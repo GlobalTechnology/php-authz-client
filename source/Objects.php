@@ -1,6 +1,6 @@
 <?php
 
-define('XMLNS_GCXAUTHZ', 'https://www.mygcx.org/authz/');
+require_once(dirname(__FILE__) . '/Constants.php');
 
 // Key object
 class GCXAuthz_Key {
