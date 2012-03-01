@@ -10,7 +10,7 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$key = new \GCXAuthz\Object\Key($keyVal);
 		$this->assertTrue($key instanceof \GCXAuthz\Object\Key, "valid object");
 		$this->assertEquals($keyVal, $key->key(), 'key method returns correct value');
-		$this->assertEquals($keyVal, $key . '', 'key stringification works');
+		$this->assertEquals($keyVal, (string)$key, 'key stringification works');
 
 		# test xml generation of key object
 		$expectedDom = new DOMDocument();
@@ -28,7 +28,7 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$ns = new \GCXAuthz\Object\Ns($nsVal);
 		$this->assertTrue($ns instanceof \GCXAuthz\Object\Ns, "valid object");
 		$this->assertEquals($nsVal, $ns->name(), 'name method returns correct value');
-		$this->assertEquals($nsVal, $ns . '', 'namespace stringification works');
+		$this->assertEquals($nsVal, (string)$ns, 'namespace stringification works');
 
 		# test xml generation of the namespace object
 		$expectedDom = new DOMDocument();

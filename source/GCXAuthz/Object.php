@@ -16,7 +16,7 @@ namespace GCXAuthz\Object {
 		public function __construct(
 			$key = ''
 		) {
-			$this->_key = $key;
+			$this->_key = (string)$key;
 		}
 
 		public function key() {
@@ -48,7 +48,7 @@ namespace GCXAuthz\Object {
 		public function __construct(
 			$name = ''
 		) {
-			$this->_name = $name . '';
+			$this->_name = (string)$name;
 		}
 
 		public function name() {
@@ -126,7 +126,7 @@ namespace GCXAuthz\Object {
 		public function __toString() {
 			$ns = $this->ns();
 			return
-				(strlen($ns) ? $ns . '|' : '') .
+				(strlen($ns) > 0 ? $ns . '|' : '') .
 				$this->name();
 		}
 
