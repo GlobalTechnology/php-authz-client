@@ -1,9 +1,16 @@
 <?php
+namespace GCXAuthz {
+	interface Object {
+		public function __toString();
+		public function toXml($doc);
+	}
+}
+
 namespace GCXAuthz\Object {
 	require_once(dirname(__FILE__) . '/Constants.php');
 
 	// Key object
-	class Key {
+	class Key implements \GCXAuthz\Object {
 		private $_key;
 
 		public function __construct(
@@ -35,7 +42,7 @@ namespace GCXAuthz\Object {
 	}
 
 	// Namespace object
-	class Ns {
+	class Ns implements \GCXAuthz\Object {
 		private $_name;
 
 		public function __construct(
@@ -67,7 +74,7 @@ namespace GCXAuthz\Object {
 	}
 
 	// base object
-	class Base {
+	abstract class Base implements \GCXAuthz\Object {
 		private $_ns = null;
 
 		private $_name = null;

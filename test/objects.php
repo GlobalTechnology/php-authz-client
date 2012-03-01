@@ -1,16 +1,14 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../source/Constants.php');
-require_once(dirname(__FILE__) . '/../source/Objects.php');
-
-use \GCXAuthz\Object\Key;
+require_once(dirname(__FILE__) . '/../source/GCXAuthz/Constants.php');
+require_once(dirname(__FILE__) . '/../source/GCXAuthz/Object.php');
 
 class ObjectTest extends PHPUnit_Framework_TestCase {
 	public function testKey() {
 		# test generation of the key object
 		$keyVal = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq';
-		$key = new Key('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
-		$this->assertTrue($key instanceof Key, "valid object");
+		$key = new \GCXAuthz\Object\Key('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
+		$this->assertTrue($key instanceof \GCXAuthz\Object\Key, "valid object");
 		$this->assertEquals($keyVal, $key->key(), 'key method returns correct value');
 		$this->assertEquals($keyVal, $key . '', 'key stringification works');
 
