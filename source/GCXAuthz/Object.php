@@ -2,6 +2,7 @@
 namespace GCXAuthz {
 	interface Object {
 		public function __toString();
+		public function equals($obj);
 		public function toXml($doc);
 	}
 }
@@ -25,6 +26,12 @@ namespace GCXAuthz\Object {
 
 		public function __toString() {
 			return $this->key();
+		}
+
+		public function equals($obj) {
+			return
+				get_class($this) === get_class($obj) &&
+				$this->key() === $obj->key();
 		}
 
 		public function toXml(
@@ -57,6 +64,12 @@ namespace GCXAuthz\Object {
 
 		public function __toString() {
 			return $this->name();
+		}
+
+		public function equals($obj) {
+			return
+				get_class($this) === get_class($obj) &&
+				strtolower($this->name()) === strtolower($obj->name());
 		}
 
 		public function toXml(
@@ -128,6 +141,13 @@ namespace GCXAuthz\Object {
 			return
 				(strlen($ns) > 0 ? $ns . '|' : '') .
 				$this->name();
+		}
+
+		public function equals($obj) {
+			return
+				get_class($this) === get_class($obj) &&
+				$this->ns()->equals($obj->ns()) &&
+				strtolower($this->name()) === strtolower($obj->name());
 		}
 
 		public function toXml(

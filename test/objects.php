@@ -20,6 +20,13 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$actualNode = $actualDom->appendChild($key->toXml($actualDom));
 		$this->assertEquals($expectedDom->saveXml(), $actualDom->saveXml(), 'valid key xml');
 		$this->assertEqualXMLStructure($expectedNode, $actualNode, TRUE, 'valid key xml');
+
+		# test equals method
+		$key1 = new \GCXAuthz\Object\Key($keyVal);
+		$key2 = new \GCXAuthz\Object\Key($keyVal);
+		$key3 = new \GCXAuthz\Object\Key($keyVal . 'abcd');
+		$this->assertTrue($key1->equals($key2), 'keys equal');
+		$this->assertFalse($key1->equals($key3), 'keys not equal');
 	}
 
 	public function testNamespace() {
