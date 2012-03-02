@@ -46,7 +46,7 @@ namespace GCXAuthz\Command {
 				if($obj instanceof \GCXAuthz\Object || is_null($obj)) {
 					// do nothing
 				}
-				// convert to any actual authorization object
+				// convert to an actual authorization object
 				elseif(is_array($obj)) {
 					$obj = new $class($obj[0], $obj[1]);
 				}
@@ -201,6 +201,36 @@ namespace GCXAuthz\Command {
 		}
 	}
 
+	class Check extends Base {
+		public function __construct($entity, $targets) {
+			parent::__construct('check', array(
+				'entities' => $entity,
+				'targets'  => $targets,
+			));
+		}
+
+		protected function _isValidType($type) {
+			return $type === 'check';
+		}
+
+		public function toXml(
+			$doc = null
+		) {
+			$node = $this->_baseXml($doc);
+
+			// generate the xml specific to a check command
+			$entities = $this->entities();
+			if(count($entities) > 0) {
+				$entityXml = $node->appendChild($entities[0]->toXml($doc));
+				foreach($this->targets() as $target) {
+					$entityXml->appendChild($target->toXml($doc));
+				}
+			}
+
+			return $node;
+		}
+	}
+
 	class GenerateLoginKey extends Base {
 		private $_ttl;
 
@@ -211,7 +241,7 @@ namespace GCXAuthz\Command {
 		) {
 			parent::__construct('generateLoginKey', array(
 				'users'      => $user,
-				'namespaces' => $namespaces
+				'namespaces' => $namespaces,
 			));
 
 			$this->_ttl = (int)$ttl;
