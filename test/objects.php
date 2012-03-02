@@ -45,5 +45,19 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$actualNode = $actualDom->appendChild($ns->toXml($actualDom));
 		$this->assertEquals($expectedDom->saveXml(), $actualDom->saveXml(), 'valid namespace xml');
 		$this->assertEqualXMLStructure($expectedNode, $actualNode, TRUE, 'valid namespace xml');
+
+		# test namespace comparison methods
+		$ns1 = new \GCXAuthz\Object\Ns('');
+		$ns2 = new \GCXAuthz\Object\Ns('parent');
+		$ns3 = new \GCXAuthz\Object\Ns('parent:child1');
+		$ns4 = new \GCXAuthz\Object\Ns('parent:child2');
+		foreach(array($ns2, $ns3, $ns4) as $ns) {
+			$this->assertTrue($ns1->contains($ns));
+		}
+		$this->assertTrue($ns2->contains($ns3));
+		$this->assertTrue($ns2->contains($ns4));
+		foreach(array($ns1, $ns2, $ns3) as $ns) {
+			$this->assertFalse($ns4->contains($ns));
+		}
 	}
 }

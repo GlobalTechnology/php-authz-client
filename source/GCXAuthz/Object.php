@@ -52,10 +52,47 @@ namespace GCXAuthz\Object {
 	class Ns implements \GCXAuthz\Object {
 		private $_name;
 
+		// parsed namespace meta-data
+		private $_parts = null;
+		private $_length = 0;
+		private $_substr = null;
+
 		public function __construct(
 			$name = ''
 		) {
 			$this->_name = (string)$name;
+
+			$this->_parseNamespace();
+		}
+
+		// parse this namespace object into components for various namespace manipulation methods
+		private function _parseNamespace() {
+			if(is_null($this->_parts)) {
+				$name = strtolower($this->name());
+				$this->_parts = strlen($name) > 0 ? explode(':', $name) : array();
+				$this->_length = count($this->_parts);
+
+				// generate namespace substrings
+				$tmpNs = '';
+				$this->_substr = array($tmpNs);
+				foreach($this->_parts as $part) {
+					if(strlen($tmpNs) > 0) {
+						$tmpNs .= ':';
+					}
+					$tmpNs .= $part;
+					$this->_substr[] = $tmpNs;
+				}
+			}
+		}
+
+		// return a namespace substring
+		private function _nsSubstr($length) {
+			$length = (int)$length;
+			if(array_key_exists($length, $this->_substr)) {
+				return $this->_substr[$length];
+			}
+
+			return null;
 		}
 
 		public function name() {
@@ -64,6 +101,13 @@ namespace GCXAuthz\Object {
 
 		public function __toString() {
 			return $this->name();
+		}
+
+		public function contains($obj) {
+			$this->_length;
+			return
+				$obj instanceof Ns &&
+				$this->_nsSubstr($this->_length) === $obj->_nsSubstr($this->_length);
 		}
 
 		public function equals($obj) {
