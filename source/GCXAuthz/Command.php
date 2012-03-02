@@ -2,7 +2,6 @@
 namespace GCXAuthz {
 	interface Command {
 		public function type();
-		public function id();
 
 //		public function keys();
 //		public function namespaces();
@@ -22,7 +21,6 @@ namespace GCXAuthz\Command {
 	require_once(dirname(__FILE__) . '/Object.php');
 
 	class Base implements \GCXAuthz\Command {
-		private $_id         = null;
 		private $_type;
 
 		private $_keys       = array();
@@ -73,11 +71,6 @@ namespace GCXAuthz\Command {
 			$this->_type = $type;
 			if(!$this->_isValidType($this->_type)) {
 				throw new Exception('invalid command type');
-			}
-
-			// store any id set on this object
-			if(array_key_exists('id', $args)) {
-				$this->_id = $args['id'];
 			}
 
 			// set the root namespace as the default namespace when no namespaces are specified
@@ -132,10 +125,6 @@ namespace GCXAuthz\Command {
 			)$/sx', $type) > 0;
 		}
 
-		public function id() {
-			return $this->_id;
-		}
-
 		public function type() {
 			return $this->_type;
 		}
@@ -180,12 +169,6 @@ namespace GCXAuthz\Command {
 			// generate the base command xml node
 			$node = $doc->createElementNS(\GCXAuthz\XMLNS, 'command');
 			$node->setAttribute('type', $this->type());
-
-			// set the id, if it is defined
-			$id = $this->id();
-			if(!is_null($id)) {
-				$node->setAttribute('id', $id);
-			}
 
 			return $node;
 		}
