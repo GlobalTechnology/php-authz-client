@@ -18,8 +18,7 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$expectedNode->setAttribute('key', $keyVal);
 		$actualDom = new DOMDocument();
 		$actualNode = $actualDom->appendChild($key->toXml($actualDom));
-		$this->assertEquals($expectedDom->saveXml(), $actualDom->saveXml(), 'valid key xml');
-		$this->assertEqualXMLStructure($expectedNode, $actualNode, TRUE, 'valid key xml');
+		$this->assertEquals($expectedDom, $actualDom, 'valid key xml');
 
 		# test equals method
 		$key1 = new \GCXAuthz\Object\Key($keyVal);
@@ -43,8 +42,7 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$expectedNode->setAttribute('name', $nsVal);
 		$actualDom = new DOMDocument();
 		$actualNode = $actualDom->appendChild($ns->toXml($actualDom));
-		$this->assertEquals($expectedDom->saveXml(), $actualDom->saveXml(), 'valid namespace xml');
-		$this->assertEqualXMLStructure($expectedNode, $actualNode, TRUE, 'valid namespace xml');
+		$this->assertEquals($expectedDom, $actualDom, 'valid namespace xml');
 
 		# test namespace comparison methods
 		$ns1 = new \GCXAuthz\Object\Ns('');
