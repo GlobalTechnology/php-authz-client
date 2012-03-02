@@ -60,9 +60,9 @@ namespace GCXAuthz\Command {
 				if($obj instanceof $class) {
 					$resp[] = $obj;
 				}
-
-				return $resp;
 			}
+
+			return $resp;
 		}
 
 		public function __construct(
