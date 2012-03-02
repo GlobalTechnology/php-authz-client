@@ -51,6 +51,9 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$ns2 = new \GCXAuthz\Object\Ns('parent');
 		$ns3 = new \GCXAuthz\Object\Ns('parent:child1');
 		$ns4 = new \GCXAuthz\Object\Ns('parent:child2');
+		$ns5 = new \GCXAuthz\Object\Ns('parent:child2');
+		$this->assertTrue($ns5->equals($ns4));
+		$this->assertFalse($ns5->equals($ns3));
 		foreach(array($ns2, $ns3, $ns4) as $ns) {
 			$this->assertTrue($ns1->contains($ns));
 		}
