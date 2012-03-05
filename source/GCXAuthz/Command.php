@@ -3,16 +3,16 @@ namespace GCXAuthz {
 	interface Command {
 		public function type();
 
-//		public function keys();
-//		public function namespaces();
-//		public function entities();
-//		public function users();
-//		public function groups();
-//		public function targets();
-//		public function resources();
-//		public function roles();
+		public function keys();
+		public function namespaces();
+		public function entities();
+		public function users();
+		public function groups();
+		public function targets();
+		public function resources();
+		public function roles();
 
-		public function toXml($doc);
+		public function toXml(\DOMDocument $doc);
 	}
 }
 
@@ -63,10 +63,7 @@ namespace GCXAuthz\Command {
 			return $resp;
 		}
 
-		public function __construct(
-			$type,
-			$args = array()
-		) {
+		public function __construct($type, array $args = array()) {
 			// make sure this is a valid command type
 			$this->_type = $type;
 			if(!$this->_isValidType($this->_type)) {
@@ -119,9 +116,7 @@ namespace GCXAuthz\Command {
 
 				login|revokeLoginKeys|
 				changeUser|restrictNamespaces|
-				dumpExecutionContext|
-
-				check
+				dumpExecutionContext
 			)$/sx', $type) > 0;
 		}
 
@@ -161,7 +156,7 @@ namespace GCXAuthz\Command {
 			return $this->_roles;
 		}
 
-		protected function _baseXml(&$doc) {
+		protected function _baseXml(\DOMDocument &$doc) {
 			if(!($doc instanceof \DOMDocument)) {
 				$doc = new \DOMDocument();
 			}
@@ -173,7 +168,7 @@ namespace GCXAuthz\Command {
 			return $node;
 		}
 
-		protected function _attachNamespaceXml($node, $objs) {
+		protected function _attachNamespaceXml(\DOMElement $node, array $objs) {
 			$rootNs = new \GCXAuthz\Object\Ns('');
 			// no namespace xml is generated
 			foreach($objs as $ns) {
@@ -184,7 +179,7 @@ namespace GCXAuthz\Command {
 			$node->appendChild($this->_objectsToXml($node->ownerDocument, 'namespaces', $objs));
 		}
 
-		protected function _objectsToXml($doc, $type, $objs) {
+		protected function _objectsToXml(\DOMDocument $doc, $type, array $objs) {
 			$node = $doc->createElementNS(\GCXAuthz\XMLNS, $type);
 			foreach($objs as $obj) {
 				$node->appendChild($obj->toXml($doc));
@@ -192,9 +187,7 @@ namespace GCXAuthz\Command {
 			return $node;
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			$node = $this->_baseXml($doc);
 
 			return $node;
@@ -213,9 +206,7 @@ namespace GCXAuthz\Command {
 			return $type === 'check';
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			$node = $this->_baseXml($doc);
 
 			// generate the xml specific to a check command
@@ -255,9 +246,7 @@ namespace GCXAuthz\Command {
 			return $this->_ttl;
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			$node = $this->_baseXml($doc);
 
 			// set the ttl if specified
