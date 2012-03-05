@@ -114,7 +114,7 @@ namespace GCXAuthz\Command {
 				list(?:ContainingGroups|GroupMembers|ContainingRoles|RoleTargets|Permissions|PermittedEntities)|
 				remove(?:FromGroups|FromRoles|Permissions)|
 
-				login|revokeLoginKeys|
+				revokeLoginKeys|
 				changeUser|restrictNamespaces|
 				dumpExecutionContext
 			)$/sx', $type) > 0;
@@ -263,6 +263,30 @@ namespace GCXAuthz\Command {
 
 			// generate xml for any attached namespaces
 			$this->_attachNamespaceXml($node, $this->namespaces());
+
+			return $node;
+		}
+	}
+
+	class Login extends Base {
+		public function __construct($key = null) {
+			parent::__construct('login', array(
+				'keys' => $key,
+			));
+		}
+
+		protected function _isValidType($type) {
+			return $type === 'login';
+		}
+
+		public function toXml(\DOMDocument $doc = null) {
+			$node = $this->_baseXml($doc);
+
+			// generate the xml specific to a login command
+			$keys = $this->keys();
+			if(count($keys) > 0) {
+				$node->appendChild($keys[0]->toXml($doc));
+			}
 
 			return $node;
 		}

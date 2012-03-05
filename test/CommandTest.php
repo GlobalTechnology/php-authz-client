@@ -99,4 +99,26 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid full generateLoginKey xml');
 	}
+
+	public function testLogin() {
+		# simple command
+		$cmd = new \GCXAuthz\Command\Login();
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'login');
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
+
+		# login with a key
+		$key = new \GCXAuthz\Object\Key('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
+		$cmd = new \GCXAuthz\Command\Login($key);
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'login');
+		$expectedNode->appendChild($key->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
+	}
 }
