@@ -2,8 +2,8 @@
 namespace GCXAuthz {
 	interface Object {
 		public function __toString();
-		public function equals($obj);
-		public function toXml($doc);
+		public function equals(Object $obj);
+		public function toXml(\DOMDocument $doc);
 	}
 }
 
@@ -28,15 +28,13 @@ namespace GCXAuthz\Object {
 			return $this->key();
 		}
 
-		public function equals($obj) {
+		public function equals(\GCXAuthz\Object $obj) {
 			return
 				get_class($this) === get_class($obj) &&
 				$this->key() === $obj->key();
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			if(!($doc instanceof \DOMDocument)) {
 				$doc = new \DOMDocument();
 			}
@@ -103,22 +101,18 @@ namespace GCXAuthz\Object {
 			return $this->name();
 		}
 
-		public function contains($obj) {
+		public function contains(Ns $obj) {
 			$this->_length;
-			return
-				$obj instanceof Ns &&
-				$this->_nsSubstr($this->_length) === $obj->_nsSubstr($this->_length);
+			return $this->_nsSubstr($this->_length) === $obj->_nsSubstr($this->_length);
 		}
 
-		public function equals($obj) {
+		public function equals(\GCXAuthz\Object $obj) {
 			return
 				get_class($this) === get_class($obj) &&
 				strtolower($this->name()) === strtolower($obj->name());
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			if(!($doc instanceof \DOMDocument)) {
 				$doc = new \DOMDocument();
 			}
@@ -187,16 +181,14 @@ namespace GCXAuthz\Object {
 				$this->name();
 		}
 
-		public function equals($obj) {
+		public function equals(\GCXAuthz\Object $obj) {
 			return
 				get_class($this) === get_class($obj) &&
 				$this->ns()->equals($obj->ns()) &&
 				strtolower($this->name()) === strtolower($obj->name());
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			if(!($doc instanceof \DOMDocument)) {
 				$doc = new \DOMDocument();
 			}
@@ -233,9 +225,7 @@ namespace GCXAuthz\Object {
 				(preg_match('/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/', $name) || $name == 'SUPERUSER' || $name == 'GUEST' || $name == 'DEFAULT');
 		}
 
-		public function toXml(
-			$doc = null
-		) {
+		public function toXml(\DOMDocument $doc = null) {
 			$node = parent::toXml($doc);
 			$node->removeAttribute('namespace');
 			return $node;
