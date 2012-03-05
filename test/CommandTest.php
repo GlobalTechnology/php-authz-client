@@ -41,6 +41,19 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function testDumpExecutionContext() {
+		# simple command
+		$cmd = new \GCXAuthz\Command\Base('dumpExecutionContext');
+
+		#xml generation
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'dumpExecutionContext');
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
+	}
+
 	public function testGenerateLoginKey() {
 		// command utilizing custom user, ttl, and multiple namespaces
 		$user = new \GCXAuthz\Object\User('GUEST');
