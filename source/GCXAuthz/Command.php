@@ -189,6 +189,94 @@ namespace GCXAuthz\Command {
 		public function toXml(\DOMDocument $doc = null) {
 			$node = $this->_baseXml($doc);
 
+			// attach object xml based on the command type
+			$type = $this->type();
+
+			// entity objects
+			if(in_array($type, array(
+				'addToGroups',
+				'addPermissions',
+				'listContainingGroups',
+				'listPermissions',
+				'removeFromGroups',
+				'removePermissions',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'entities', $this->entities()));
+			}
+
+			// user objects
+			if(in_array($type, array(
+				'addUsers',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'users', $this->users()));
+			}
+
+			// group objects
+			if(in_array($type, array(
+				'addGroups',
+				'removeGroups',
+				'addToGroups',
+				'listGroupMembers',
+				'removeFromGroups',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'groups', $this->groups()));
+			}
+
+			// target objects
+			if(in_array($type, array(
+				'addToRoles',
+				'addPermissions',
+				'listContainingRoles',
+				'listPermittedEntities',
+				'removeFromRoles',
+				'removePermissions',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'targets', $this->targets()));
+			}
+
+			// resource objects
+			if(in_array($type, array(
+				'addResources',
+				'removeResources',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'resources', $this->resources()));
+			}
+
+			// role objects
+			if(in_array($type, array(
+				'addRoles',
+				'removeRoles',
+				'addToRoles',
+				'listRoleTargets',
+				'removeFromRoles'
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'roles', $this->roles()));
+			}
+
+			// key objects
+			if(in_array($type, array(
+				'revokeLoginKeys',
+			))) {
+				$node->appendChild($this->_objectsToXml($doc, 'keys', $this->keys()));
+			}
+
+			// namespace objects
+			if(in_array($type, array(
+				'listGroups',
+				'listResources',
+				'listRoles',
+				'listContainingGroups',
+				'listContainingRoles',
+				'listGroupMembers',
+				'listPermissions',
+				'listPermittedEntities',
+				'listRoleTargets',
+				'removeAllObjects',
+				'restrictNamespaces',
+			))) {
+				$this->_attachNamespaceXml($node, $this->namespaces());
+			}
+
 			return $node;
 		}
 	}

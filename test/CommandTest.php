@@ -122,6 +122,48 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
 	}
 
+	public function testListContainingGroups() {
+		$entity = new \GCXAuthz\Object\Entity('ns', 'group');
+		$user = new \GCXAuthz\Object\User('GUEST');
+		$group = new \GCXAuthz\Object\Group('ns', 'group');
+		$namespaces = array(
+			new \GCXAuthz\Object\Ns('ns1'),
+			new \GCXAuthz\Object\Ns('ns2')
+		);
+
+		// simple command
+		$cmd = new \GCXAuthz\Command\Base('listContainingGroups', array(
+			'entities' => array($entity),
+		));
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'listContainingGroups');
+		$entitiesNode = $expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'entities'));
+		$entitiesNode->appendChild($entity->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid simple listContainingGroups xml');
+
+		// advanced command
+		$cmd = new \GCXAuthz\Command\Base('listContainingGroups', array(
+			'entities'   => array($entity, $user, $group),
+			'namespaces' => $namespaces,
+		));
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'listContainingGroups');
+		$entitiesNode = $expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'entities'));
+		$entitiesNode->appendChild($entity->toXml($expectedDom));
+		$entitiesNode->appendChild($user->toXml($expectedDom));
+		$entitiesNode->appendChild($group->toXml($expectedDom));
+		$namespacesNode = $expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'namespaces'));
+		$namespacesNode->appendChild($namespaces[0]->toXml($expectedDom));
+		$namespacesNode->appendChild($namespaces[1]->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid simple listContainingGroups xml');
+	}
+
 	public function testRenameGroup() {
 		# simple command
 		$src = new \GCXAuthz\Object\Group('src:ns', 'srcGroup');
@@ -158,5 +200,35 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid renameResource xml');
+	}
+
+	public function testRevokeLoginKeys() {
+		$key1 = new \GCXAuthz\Object\Key('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
+		$key2 = new \GCXAuthz\Object\Key('zyxwvutsrqponmlkjihgfedcbaabcdefghijklmnopq');
+		$resource = new \GCXAuthz\Object\Resource('ns', 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
+
+		# simple command
+		$cmd = new \GCXAuthz\Command\Base('revokeLoginKeys');
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'revokeLoginKeys');
+		$expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'keys'));
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
+
+		# command for multiple keys
+		$cmd = new \GCXAuthz\Command\Base('revokeLoginKeys', array(
+			'keys' => array($key1, $resource, $key2),
+		));
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'revokeLoginKeys');
+		$keysNode = $expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'keys'));
+		$keysNode->appendChild($key1->toXml($expectedDom));
+		$keysNode->appendChild($key2->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
 	}
 }
