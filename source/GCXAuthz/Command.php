@@ -107,7 +107,6 @@ namespace GCXAuthz\Command {
 				add(?:Users|Groups|Resources|Roles)|
 				list(?:Groups|Resources|Roles)|
 				remove(?:Groups|Resources|Roles)|
-				rename(?:Group|Resource|Role|Namespace)|
 				removeAllObjects|
 
 				add(?:ToGroups|ToRoles|Permissions)|
@@ -190,6 +189,41 @@ namespace GCXAuthz\Command {
 		public function toXml(\DOMDocument $doc = null) {
 			$node = $this->_baseXml($doc);
 
+			return $node;
+		}
+	}
+
+	class RenameBase extends Base {
+		protected function _isValidType($type) {
+			return preg_match('/^(?:
+				rename(?:Group|Resource|Role|Namespace)
+			)$/sx', $type) > 0;
+		}
+
+		public function toXml(\DOMDocument $doc = null) {
+			// get the source and target object for this rename command
+			switch ((string) $this->type()) {
+				case 'renameGroup':
+					$objs = $this->groups();
+					break;
+				case 'renameNamespace':
+					$objs = $this->namespaces();
+					break;
+				case 'renameResource':
+					$objs = $this->resources();
+					break;
+				case 'renameRole':
+					$objs = $this->roles();
+					break;
+			}
+			list($source, $target) = $objs;
+
+			// generate the xml for this rename command
+			$node = $this->_baseXml($doc);
+			$node->appendChild($doc->createElementNS(\GCXAuthz\XMLNS, 'source'))->appendChild($source->toXml($doc));
+			$node->appendChild($doc->createElementNS(\GCXAuthz\XMLNS, 'target'))->appendChild($target->toXml($doc));
+
+			// return the generated xml element
 			return $node;
 		}
 	}

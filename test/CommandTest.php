@@ -121,4 +121,42 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
 	}
+
+	public function testRenameGroup() {
+		# simple command
+		$src = new \GCXAuthz\Object\Group('src:ns', 'srcGroup');
+		$tgt = new \GCXAuthz\Object\Group('tgt:ns', 'tgtGroup');
+		$cmd = new \GCXAuthz\Command\RenameBase('renameGroup', array(
+			'groups' => array($src, $tgt),
+		));
+
+		#xml generation
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'renameGroup');
+		$expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'source'))->appendChild($src->toXml($expectedDom));
+		$expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'target'))->appendChild($tgt->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid renameGroup xml');
+	}
+
+	public function testRenameResource() {
+		# simple command
+		$src = new \GCXAuthz\Object\Resource('src:ns', 'srcResource');
+		$tgt = new \GCXAuthz\Object\Resource('tgt:ns', 'tgtResource');
+		$cmd = new \GCXAuthz\Command\RenameBase('renameResource', array(
+			'resources' => array($src, $tgt),
+		));
+
+		#xml generation
+		$expectedDom = new DOMDocument();
+		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'command'));
+		$expectedNode->setAttribute('type', 'renameResource');
+		$expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'source'))->appendChild($src->toXml($expectedDom));
+		$expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'target'))->appendChild($tgt->toXml($expectedDom));
+		$actualDom = new DOMDocument();
+		$actualDom->appendChild($cmd->toXml($actualDom));
+		$this->assertEquals($expectedDom, $actualDom, 'valid renameResource xml');
+	}
 }
