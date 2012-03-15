@@ -60,7 +60,16 @@ namespace GCXAuthz\Object {
 		) {
 			$this->_name = (string)$name;
 
+			if(!$this->isValid()) {
+				throw new \Exception('invalid object');
+			}
+
 			$this->_parseNamespace();
+		}
+
+		protected function isValid() {
+			return
+				!preg_match('/\|/', $this->name());
 		}
 
 		// parse this namespace object into components for various namespace manipulation methods

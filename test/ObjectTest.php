@@ -60,5 +60,16 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		foreach(array($ns1, $ns2, $ns3) as $ns) {
 			$this->assertFalse($ns4->contains($ns));
 		}
+
+		# test invalid namespaces
+		foreach(array('|', 'a|b|c') as $nsVal) {
+			$ns = null;
+			try {
+				$ns = new \GCXAuthz\Object\Ns($nsVal);
+				$this->fail('no exception thrown for invalid namespace');
+			} catch(Exception $e) {
+			}
+			$this->assertFalse($ns instanceof \GCXAuthz\Object\Ns, "invalid object");
+		}
 	}
 }
