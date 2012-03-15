@@ -108,7 +108,7 @@ namespace GCXAuthz {
 				$this->addCommands(new Command\RenameBase($name, array($objType => array_slice($args, 0, 2))));
 			}
 			else {
-				throw new Exception('Invalid method called');
+				throw new \Exception('Invalid method called');
 			}
 
 			return $this;

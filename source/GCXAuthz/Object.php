@@ -161,7 +161,7 @@ namespace GCXAuthz\Object {
 			$this->_name = $name;
 
 			if(!$this->isValid()) {
-				throw new Exception('invalid object');
+				throw new \Exception('invalid object');
 			}
 		}
 
