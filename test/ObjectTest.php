@@ -72,4 +72,41 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 			$this->assertFalse($ns instanceof \GCXAuthz\Object\Ns, "invalid object");
 		}
 	}
+
+	public function testTarget() {
+		$nsVal = 'test:ns';
+		$ns = new \GCXAuthz\Object\Ns($nsVal);
+		$rootNs = new \GCXAuthz\Object\Ns('');
+		foreach(array('a', 'b:c') as $name) {
+			// test 2 param creation
+			$target = new \GCXAuthz\Object\Target($ns, $name);
+			$this->assertTrue($ns->equals($target->ns()));
+			$this->assertEquals($name, $target->name());
+			$this->assertEquals($nsVal . '|' . $name, (string) $target);
+
+			// test 2 param creation with strings only
+			$target = new \GCXAuthz\Object\Target($nsVal, $name);
+			$this->assertTrue($ns->equals($target->ns()));
+			$this->assertEquals($name, $target->name());
+			$this->assertEquals($nsVal . '|' . $name, (string) $target);
+
+			// test 2 param creation with root namespace
+			$target = new \GCXAuthz\Object\Target($rootNs, $name);
+			$this->assertTrue($rootNs->equals($target->ns()));
+			$this->assertEquals($name, $target->name());
+			$this->assertEquals($name, (string) $target);
+
+			// test 1 param creation
+			$target = new \GCXAuthz\Object\Target($nsVal . '|' . $name);
+			$this->assertTrue($ns->equals($target->ns()));
+			$this->assertEquals($name, $target->name());
+			$this->assertEquals($nsVal . '|' . $name, (string) $target);
+
+			// test 1 param creation with no namespace
+			$target = new \GCXAuthz\Object\Target($name);
+			$this->assertTrue($rootNs->equals($target->ns()));
+			$this->assertEquals($name, $target->name());
+			$this->assertEquals($name, (string) $target);
+		}
+	}
 }

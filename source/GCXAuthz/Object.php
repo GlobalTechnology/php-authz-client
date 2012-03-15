@@ -150,6 +150,11 @@ namespace GCXAuthz\Object {
 					$ns = $matches[1];
 					$name = $matches[2];
 				}
+				// no namespace detected, use root namespace
+				else {
+					$name = $ns;
+					$ns = '';
+				}
 			}
 
 			// Make sure $ns is a Namespace object
