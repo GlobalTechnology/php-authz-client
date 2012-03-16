@@ -26,6 +26,12 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 		$key3 = new \GCXAuthz\Object\Key($keyVal . 'abcd');
 		$this->assertTrue($key1->equals($key2), 'keys equal');
 		$this->assertFalse($key1->equals($key3), 'keys not equal');
+
+		# test newFromXml
+		$keyVal = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq';
+		$key1 = new \GCXAuthz\Object\Key($keyVal);
+		$key2 = \GCXAuthz\Object\Key::newFromXml($key1->toXml());
+		$this->assertTrue($key1->equals($key2), 'newFromXml key is equal to original');
 	}
 
 	public function testNamespace() {
@@ -71,6 +77,12 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 			}
 			$this->assertFalse($ns instanceof \GCXAuthz\Object\Ns, "invalid object");
 		}
+
+		# test newFromXml
+		$nsVal = 'test:namespace';
+		$ns1 = new \GCXAuthz\Object\Ns($nsVal);
+		$ns2 = \GCXAuthz\Object\Ns::newFromXml($ns1->toXml());
+		$this->assertTrue($ns1->equals($ns2), 'newFromXml namespace is equal to original');
 	}
 
 	public function testTarget() {
@@ -108,5 +120,11 @@ class ObjectTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals($name, $target->name());
 			$this->assertEquals($name, (string) $target);
 		}
+
+		# test newFromXml
+		$name = 'target';
+		$target1 = new \GCXAuthz\Object\Target($ns, $name);
+		$target2 = \GCXAuthz\Object\Target::newFromXml($target1->toXml());
+		$this->assertTrue($target1->equals($target2), 'newFromXml target is equal to original');
 	}
 }

@@ -18,6 +18,11 @@ namespace GCXAuthz\Object {
 			$this->_key = (string)$key;
 		}
 
+		public static function newFromXml(\DOMElement $node) {
+			$key = $node->getAttribute('key');
+			return new Key($key);
+		}
+
 		public function key() {
 			return $this->_key;
 		}
@@ -61,6 +66,11 @@ namespace GCXAuthz\Object {
 			}
 
 			$this->_parseNamespace();
+		}
+
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('name');
+			return new Ns($ns);
 		}
 
 		protected function isValid() {
@@ -209,6 +219,12 @@ namespace GCXAuthz\Object {
 	}
 
 	class Entity extends Base {
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('namespace');
+			$name = $node->getAttribute('name');
+			return new Entity($ns, $name);
+		}
+
 		public function type() {
 			return 'entity';
 		}
@@ -217,6 +233,11 @@ namespace GCXAuthz\Object {
 	class User extends Entity {
 		public function __construct($name) {
 			parent::__construct('', strtoupper($name));
+		}
+
+		public static function newFromXml(\DOMElement $node) {
+			$name = $node->getAttribute('name');
+			return new User($ns);
 		}
 
 		public function type() {
@@ -238,24 +259,48 @@ namespace GCXAuthz\Object {
 	}
 
 	class Group extends Entity {
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('namespace');
+			$name = $node->getAttribute('name');
+			return new Group($ns, $name);
+		}
+
 		public function type() {
 			return 'group';
 		}
 	}
 
 	class Target extends Base {
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('namespace');
+			$name = $node->getAttribute('name');
+			return new Target($ns, $name);
+		}
+
 		public function type() {
 			return 'target';
 		}
 	}
 
 	class Resource extends Target {
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('namespace');
+			$name = $node->getAttribute('name');
+			return new Resource($ns, $name);
+		}
+
 		public function type() {
 			return 'resource';
 		}
 	}
 
 	class Role extends Target {
+		public static function newFromXml(\DOMElement $node) {
+			$ns = $node->getAttribute('namespace');
+			$name = $node->getAttribute('name');
+			return new Role($ns, $name);
+		}
+
 		public function type() {
 			return 'role';
 		}
