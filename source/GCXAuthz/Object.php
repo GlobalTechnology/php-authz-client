@@ -14,9 +14,7 @@ namespace GCXAuthz\Object {
 	class Key implements \GCXAuthz\Object {
 		private $_key;
 
-		public function __construct(
-			$key = ''
-		) {
+		public function __construct($key) {
 			$this->_key = (string)$key;
 		}
 
@@ -55,9 +53,7 @@ namespace GCXAuthz\Object {
 		private $_length = 0;
 		private $_substr = null;
 
-		public function __construct(
-			$name = ''
-		) {
+		public function __construct($name) {
 			$this->_name = (string)$name;
 
 			if(!$this->isValid()) {
@@ -139,10 +135,7 @@ namespace GCXAuthz\Object {
 
 		private $_name = null;
 
-		public function __construct(
-			$ns = '',
-			$name = null
-		) {
+		public function __construct($ns, $name = null) {
 			// no name was provided, so parse the $ns value for the name
 			if(is_null($name)) {
 				$matches = array();
@@ -222,9 +215,7 @@ namespace GCXAuthz\Object {
 	}
 
 	class User extends Entity {
-		public function __construct(
-			$name
-		) {
+		public function __construct($name) {
 			parent::__construct('', strtoupper($name));
 		}
 

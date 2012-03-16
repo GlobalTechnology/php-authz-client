@@ -72,7 +72,7 @@ namespace GCXAuthz\Command {
 
 			// set the root namespace as the default namespace when no namespaces are specified
 			if(!array_key_exists('namespaces', $args) || is_null($args['namespaces'])) {
-				$args['namespaces'] = new \GCXAuthz\Object\Ns();
+				$args['namespaces'] = new \GCXAuthz\Object\Ns('');
 			}
 
 			// process authz objects
