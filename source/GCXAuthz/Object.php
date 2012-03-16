@@ -237,7 +237,7 @@ namespace GCXAuthz\Object {
 
 		public static function newFromXml(\DOMElement $node) {
 			$name = $node->getAttribute('name');
-			return new User($ns);
+			return new User($name);
 		}
 
 		public function type() {

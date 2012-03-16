@@ -21,7 +21,7 @@ namespace GCXAuthz {
 				}
 
 				// switch based on node being processed
-				switch($node->localname) {
+				switch($node->localName) {
 					// object node
 					case "key":
 						return Object\Key::newFromXml($node);

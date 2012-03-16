@@ -154,7 +154,7 @@ namespace GCXAuthz\Command {
 			return $this->_roles;
 		}
 
-		protected function _baseXml(\DOMDocument &$doc) {
+		protected function _baseXml(\DOMDocument &$doc = null) {
 			if(!($doc instanceof \DOMDocument)) {
 				$doc = new \DOMDocument();
 			}
