@@ -101,6 +101,25 @@ namespace GCXAuthz\Command {
 			}
 		}
 
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$type = $node->getAttribute('type');
+			$objs = array();
+			foreach(array('keys', 'namespaces', 'entities', 'users', 'groups', 'targets', 'resources', 'roles') as $objType) {
+				if($xpath->evaluate('count(authz:' . $objType . ')', $node) > 0) {
+					$objs[$objType] = array();
+					foreach($xpath->query('authz:' . $objType . '/authz:*', $node) as $obj) {
+						$objs[$objType][] = \GCXAuthz\XmlUtils::processXmlNode($obj, $xpath);
+					}
+				}
+			}
+
+			return new Base($type, $objs);
+		}
+
 		protected function _isValidType($type) {
 			return preg_match('/^(?:
 				add(?:Users|Groups|Resources|Roles)|
@@ -394,6 +413,21 @@ namespace GCXAuthz\Command {
 			parent::__construct('login', array(
 				'keys' => $key,
 			));
+		}
+
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$type = $node->getAttribute('type');
+			$nodes = $xpath->query('authz:key', $node);
+			$key = null;
+			if($nodes->length > 0) {
+				$key = \GCXAuthz\XmlUtils::processXmlNode($nodes->item(0), $xpath);
+			}
+
+			return new Login($key);
 		}
 
 		protected function _isValidType($type) {

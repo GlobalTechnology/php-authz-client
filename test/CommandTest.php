@@ -50,6 +50,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Base::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testGenerateLoginKey() {
@@ -107,6 +110,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Login::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 
 		# login with a key
 		$key = new \GCXAuthz\Object\Key('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq');
@@ -118,6 +124,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid login xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Login::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testListContainingGroups() {
@@ -139,8 +148,11 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$entitiesNode = $expectedNode->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'entities'));
 		$entitiesNode->appendChild($entity->toXml($expectedDom));
 		$actualDom = new DOMDocument();
-		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
+		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid simple listContainingGroups xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Base::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 
 		// advanced command
 		$cmd = new \GCXAuthz\Command\Base('listContainingGroups', array(
@@ -158,8 +170,11 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$namespacesNode->appendChild($namespaces[0]->toXml($expectedDom));
 		$namespacesNode->appendChild($namespaces[1]->toXml($expectedDom));
 		$actualDom = new DOMDocument();
-		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
+		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid simple listContainingGroups xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Base::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testRenameGroup() {
@@ -214,6 +229,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Base::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 
 		# command for multiple keys
 		$cmd = new \GCXAuthz\Command\Base('revokeLoginKeys', array(
@@ -227,6 +245,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$keysNode->appendChild($key2->toXml($expectedDom));
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
-		$this->assertEquals($expectedDom, $actualDom, 'valid dumpExecutionContext xml');
+		$this->assertEquals($expectedDom, $actualDom, 'valid revokeLoginKeys xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\Base::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 }

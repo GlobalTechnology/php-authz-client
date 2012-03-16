@@ -22,6 +22,16 @@ namespace GCXAuthz {
 
 				// switch based on node being processed
 				switch($node->localName) {
+					// command node
+					case "command"   :
+						$type = $node->getAttribute('type');
+						switch($type) {
+							case "login":
+								return Command\Login::newFromXml($node, $xpath);
+							default:
+								return Command\Base::newFromXml($node, $xpath);
+						}
+						break;
 					// object node
 					case "key":
 						return Object\Key::newFromXml($node);
