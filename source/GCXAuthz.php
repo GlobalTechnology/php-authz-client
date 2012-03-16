@@ -27,5 +27,8 @@ spl_autoload_register(function ($name) {
 		case "GCXAuthz\Commands":
 			require_once(dirname(__FILE__) . '/GCXAuthz/Commands.php');
 			break;
+		case "GCXAuthz\XmlUtils":
+			require_once(dirname(__FILE__) . '/GCXAuthz/XmlUtils.php');
+			break;
 	}
 });
