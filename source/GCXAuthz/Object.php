@@ -8,7 +8,7 @@ namespace GCXAuthz {
 }
 
 namespace GCXAuthz\Object {
-	require_once(dirname(__FILE__) . '/Constants.php');
+	require_once(dirname(__FILE__) . '/../GCXAuthz.php');
 
 	// Key object
 	class Key implements \GCXAuthz\Object {

@@ -1,7 +1,6 @@
 <?php
 namespace GCXAuthz {
-	require_once(dirname(__FILE__) . '/Constants.php');
-	require_once(dirname(__FILE__) . '/Command.php');
+	require_once(dirname(__FILE__) . '/../GCXAuthz.php');
 
 	class Commands {
 		private $_commands = array();

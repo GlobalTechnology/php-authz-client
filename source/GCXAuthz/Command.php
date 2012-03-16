@@ -17,8 +17,7 @@ namespace GCXAuthz {
 }
 
 namespace GCXAuthz\Command {
-	require_once(dirname(__FILE__) . '/Constants.php');
-	require_once(dirname(__FILE__) . '/Object.php');
+	require_once(dirname(__FILE__) . '/../GCXAuthz.php');
 
 	class Base implements \GCXAuthz\Command {
 		private $_type;

@@ -1,8 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../source/GCXAuthz/Constants.php');
-require_once(dirname(__FILE__) . '/../source/GCXAuthz/Commands.php');
-require_once(dirname(__FILE__) . '/../source/GCXAuthz/Object.php');
+require_once(dirname(__FILE__) . '/../source/GCXAuthz.php');
 
 class CommandsTest extends PHPUnit_Framework_TestCase {
 	public function testCommands() {
