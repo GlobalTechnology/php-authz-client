@@ -6,6 +6,19 @@ namespace GCXAuthz {
 		private $_commands = array();
 		private $_processed = false;
 
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$cmds = new Commands();
+			foreach($xpath->query('authz:command', $node) as $cmd) {
+				$cmds->addCommands(\GCXAuthz\XmlUtils::processXmlNode($cmd, $xpath));
+			}
+
+			return $cmds;
+		}
+
 		public function addCommands(Command $command1/*[, Command $command2[, Command $...]]*/) {
 			$cmds = func_get_args();
 			foreach($cmds as $cmd) {

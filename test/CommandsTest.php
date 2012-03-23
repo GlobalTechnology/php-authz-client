@@ -48,5 +48,8 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmds->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid commands xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Commands::newFromXml($cmds->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 }
