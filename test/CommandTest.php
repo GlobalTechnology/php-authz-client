@@ -200,6 +200,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid renameGroup xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\RenameBase::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testRenameResource() {
@@ -219,6 +222,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid renameResource xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\RenameBase::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testRevokeLoginKeys() {

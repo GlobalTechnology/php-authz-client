@@ -300,6 +300,36 @@ namespace GCXAuthz\Command {
 	}
 
 	class RenameBase extends Base {
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$type = $node->getAttribute('type');
+			$nodes = $xpath->query('authz:source/authz:*', $node);
+			$source = $nodes->length > 0 ? \GCXAuthz\XmlUtils::processXmlNode($nodes->item(0), $xpath) : null;
+			$nodes = $xpath->query('authz:target/authz:*', $node);
+			$target = $nodes->length > 0 ? \GCXAuthz\XmlUtils::processXmlNode($nodes->item(0), $xpath) : null;
+
+			$objs = array();
+			switch($type) {
+				case 'renameGroup':
+					$objs['groups'] = array($source, $target);
+					break;
+				case 'renameNamespace':
+					$objs['namespaces'] = array($source, $target);
+					break;
+				case 'renameResource':
+					$objs['resources'] = array($source, $target);
+					break;
+				case 'renameRole':
+					$objs['roles'] = array($source, $target);
+					break;
+			}
+
+			return new RenameBase($type, $objs);
+		}
+
 		protected function _isValidType($type) {
 			return preg_match('/^(?:
 				rename(?:Group|Resource|Role|Namespace)

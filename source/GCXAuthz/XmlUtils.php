@@ -31,6 +31,11 @@ namespace GCXAuthz {
 						switch($type) {
 							case "login":
 								return Command\Login::newFromXml($node, $xpath);
+							case 'renameGroup':
+							case 'renameNamespace':
+							case 'renameResource':
+							case 'renameRole':
+								return Command\RenameBase::newFromXml($node, $xpath);
 							default:
 								return Command\Base::newFromXml($node, $xpath);
 						}
