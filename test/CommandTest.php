@@ -78,6 +78,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid simple generateLoginKey xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\GenerateLoginKey::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 
 		// command utilizing custom user, ttl, and multiple namespaces
 		$user = new \GCXAuthz\Object\User('GUEST');
@@ -99,6 +102,9 @@ class CommandTest extends PHPUnit_Framework_TestCase {
 		$actualDom = new DOMDocument();
 		$actualNode = $actualDom->appendChild($cmd->toXml($actualDom));
 		$this->assertEquals($expectedDom, $actualDom, 'valid full generateLoginKey xml');
+		$actualDom2 = new DOMDocument();
+		$actualDom2->appendChild(\GCXAuthz\Command\GenerateLoginKey::newFromXml($cmd->toXml())->toXml($actualDom2));
+		$this->assertEquals($actualDom, $actualDom2, 'newFromXml test');
 	}
 
 	public function testLogin() {

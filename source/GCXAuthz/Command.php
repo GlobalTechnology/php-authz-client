@@ -378,6 +378,29 @@ namespace GCXAuthz\Command {
 			$this->_ttl = (int)$ttl;
 		}
 
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$ttl = $node->getAttribute('ttl');
+			$user = null;
+			$namespaces = null;
+			$nodes = $xpath->query('authz:user', $node);
+			if($nodes->length > 0) {
+				$user = \GCXAuthz\XmlUtils::processXmlNode($nodes->item(0), $xpath);
+			}
+
+			if($xpath->evaluate('count(authz:namespaces)', $node) > 0) {
+				$namespaces = array();
+				foreach($xpath->query('authz:namespaces/authz:namespace', $node) as $ns) {
+					$namespaces[] = \GCXAuthz\XmlUtils::processXmlNode($ns, $xpath);
+				}
+			}
+
+			return new GenerateLoginKey($user, $namespaces, $ttl);
+		}
+
 		protected function _isValidType($type) {
 			return $type === 'generateLoginKey';
 		}
