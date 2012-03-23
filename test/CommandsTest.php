@@ -7,6 +7,8 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 		$key = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopq';
 		$ns = 'ns1';
 		$user = 'GUEST';
+		$target1 = 'testns:ns1|resource';
+		$target2 = 'testns:ns2|resource';
 
 		#generate some basic commands
 		$cmds = new \GCXAuthz\Commands();
@@ -15,12 +17,14 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 			->listGroups($ns)
 			->addUsers($user)
 			->generateLoginKey()
-			->generateLoginKey($user, null, 5);
+			->generateLoginKey($user, null, 5)
+			->check($user, array($target1, $target2))
+			;
 
 		$expectedDom = new DOMDocument();
 		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'commands'));
 		$rawCmds = $cmds->commands();
-		$this->assertEquals(5, count($rawCmds));
+		$this->assertEquals(6, count($rawCmds));
 		# login command
 		$cmd = $rawCmds[0];
 		$expectedNode->appendChild($cmd->toXml($expectedDom));
@@ -62,6 +66,18 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($users));
 		$this->assertTrue($users[0]->equals(new \GCXAuthz\Object\User($user)));
 		$this->assertEquals(5, $cmd->ttl());
+		// check($user, array($target1, $target2)) command
+		$cmd = $rawCmds[5];
+		$expectedNode->appendChild($cmd->toXml($expectedDom));
+		$this->assertTrue($cmd instanceof \GCXAuthz\Command\Check, "valid object");
+		$this->assertEquals('check', $cmd->type());
+		$entities = $cmd->entities();
+		$this->assertEquals(1, count($entities));
+		$this->assertTrue($entities[0]->equals(new \GCXAuthz\Object\Entity($user)));
+		$targets = $cmd->targets();
+		$this->assertEquals(2, count($targets));
+		$this->assertTrue($targets[0]->equals(new \GCXAuthz\Object\Target($target1)));
+		$this->assertTrue($targets[1]->equals(new \GCXAuthz\Object\Target($target2)));
 
 		#test xml generation
 		$actualDom = new DOMDocument();
