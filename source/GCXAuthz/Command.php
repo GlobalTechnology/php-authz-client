@@ -66,7 +66,7 @@ namespace GCXAuthz\Command {
 			// make sure this is a valid command type
 			$this->_type = $type;
 			if(!$this->_isValidType($this->_type)) {
-				throw new Exception('invalid command type');
+				throw new \Exception('invalid command type');
 			}
 
 			// set the root namespace as the default namespace when no namespaces are specified
@@ -443,9 +443,8 @@ namespace GCXAuthz\Command {
 				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
 			}
 
-			$type = $node->getAttribute('type');
-			$nodes = $xpath->query('authz:key', $node);
 			$key = null;
+			$nodes = $xpath->query('authz:key', $node);
 			if($nodes->length > 0) {
 				$key = \GCXAuthz\XmlUtils::processXmlNode($nodes->item(0), $xpath);
 			}
