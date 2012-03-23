@@ -13,12 +13,14 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 		$cmds
 			->login($key)
 			->listGroups($ns)
-			->addUsers($user);
+			->addUsers($user)
+			->generateLoginKey()
+			->generateLoginKey($user, null, 5);
 
 		$expectedDom = new DOMDocument();
 		$expectedNode = $expectedDom->appendChild($expectedDom->createElementNS(\GCXAuthz\XMLNS, 'commands'));
 		$rawCmds = $cmds->commands();
-		$this->assertEquals(3, count($rawCmds));
+		$this->assertEquals(5, count($rawCmds));
 		# login command
 		$cmd = $rawCmds[0];
 		$expectedNode->appendChild($cmd->toXml($expectedDom));
@@ -43,6 +45,23 @@ class CommandsTest extends PHPUnit_Framework_TestCase {
 		$users = $cmd->users();
 		$this->assertEquals(1, count($users));
 		$this->assertTrue($users[0]->equals(new \GCXAuthz\Object\User($user)));
+		# generateLoginKey command (no params)
+		$cmd = $rawCmds[3];
+		$expectedNode->appendChild($cmd->toXml($expectedDom));
+		$this->assertTrue($cmd instanceof \GCXAuthz\Command\GenerateLoginKey, "valid object");
+		$this->assertEquals('generateLoginKey', $cmd->type());
+		$users = $cmd->users();
+		$this->assertEquals(0, count($users));
+		$this->assertEquals(0, $cmd->ttl());
+		# generateLoginKey command (user & ttl)
+		$cmd = $rawCmds[4];
+		$expectedNode->appendChild($cmd->toXml($expectedDom));
+		$this->assertTrue($cmd instanceof \GCXAuthz\Command\GenerateLoginKey, "valid object");
+		$this->assertEquals('generateLoginKey', $cmd->type());
+		$users = $cmd->users();
+		$this->assertEquals(1, count($users));
+		$this->assertTrue($users[0]->equals(new \GCXAuthz\Object\User($user)));
+		$this->assertEquals(5, $cmd->ttl());
 
 		#test xml generation
 		$actualDom = new DOMDocument();
