@@ -26,6 +26,7 @@ namespace GCXAuthz {
 					$this->_commands[] = $cmd;
 				}
 			}
+			return $this;
 		}
 
 		public function commands() {
@@ -56,8 +57,7 @@ namespace GCXAuthz {
 		}
 
 		public function check($entity, $targets) {
-			$this->addCommands(new Command\Check($entity, $targets));
-			return $this;
+			return $this->addCommands(new Command\Check($entity, $targets));
 		}
 
 		public function generateLoginKey(
@@ -65,13 +65,11 @@ namespace GCXAuthz {
 			$namespaces = null,
 			$ttl = 0
 		) {
-			$this->addCommands(new Command\GenerateLoginKey($user, $namespaces, $ttl));
-			return $this;
+			return $this->addCommands(new Command\GenerateLoginKey($user, $namespaces, $ttl));
 		}
 
 		public function login($key) {
-			$this->addCommands(new Command\Login($key));
-			return $this;
+			return $this->addCommands(new Command\Login($key));
 		}
 
 		private static $_generic_methods = array(
@@ -113,17 +111,15 @@ namespace GCXAuthz {
 		public function __call($name, array $args) {
 			if(array_key_exists($name, self::$_generic_methods)) {
 				$argNames = self::$_generic_methods[$name];
-				$this->addCommands(new Command\Base($name, array_combine($argNames, $args)));
+				return $this->addCommands(new Command\Base($name, array_combine($argNames, $args)));
 			}
 			elseif(array_key_exists($name, self::$_generic_rename_methods)) {
 				$objType = self::$_generic_rename_methods[$name];
-				$this->addCommands(new Command\RenameBase($name, array($objType => array_slice($args, 0, 2))));
+				return $this->addCommands(new Command\RenameBase($name, array($objType => array_slice($args, 0, 2))));
 			}
 			else {
 				throw new \Exception('Invalid method called');
 			}
-
-			return $this;
 		}
 	}
 }
