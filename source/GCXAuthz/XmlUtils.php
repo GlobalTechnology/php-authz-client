@@ -29,7 +29,9 @@ namespace GCXAuthz {
 					case "command"   :
 						$type = $node->getAttribute('type');
 						switch($type) {
-							case "login":
+							case 'check':
+								return Command\Check::newFromXml($node, $xpath);
+							case 'login':
 								return Command\Login::newFromXml($node, $xpath);
 							case 'generateLoginKey':
 								return Command\GenerateLoginKey::newFromXml($node, $xpath);

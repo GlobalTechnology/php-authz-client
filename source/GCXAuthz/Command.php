@@ -372,6 +372,25 @@ namespace GCXAuthz\Command {
 			));
 		}
 
+		public static function newFromXml(\DOMElement $node, \DOMXPath $xpath = null) {
+			if(!($xpath instanceof \DOMXPath)) {
+				$xpath = \GCXAuthz\XmlUtils::getAuthzXPath($node->ownerDocument);
+			}
+
+			$entity;
+			$targets = array();
+			$nodes = $xpath->query('authz:entity | authz:user | authz:group', $node);
+			if($nodes->length > 0) {
+				$entityNode = $nodes->item(0);
+				$entity = \GCXAuthz\XmlUtils::processXmlNode($entityNode, $xpath);
+				foreach($xpath->query('authz:*', $entityNode) as $targetNode) {
+					$targets[] = \GCXAuthz\XmlUtils::processXmlNode($targetNode, $xpath);
+				}
+			}
+
+			return new Check($entity, $targets);
+		}
+
 		protected function _isValidType($type) {
 			return $type === 'check';
 		}
