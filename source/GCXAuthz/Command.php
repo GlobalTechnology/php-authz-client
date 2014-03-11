@@ -1,5 +1,7 @@
 <?php
 namespace GCXAuthz {
+	require_once(dirname(__FILE__) . '/../GCXAuthz.php');
+
 	interface Command {
 		public function type();
 
@@ -17,8 +19,6 @@ namespace GCXAuthz {
 }
 
 namespace GCXAuthz\Command {
-	require_once(dirname(__FILE__) . '/../GCXAuthz.php');
-
 	class Base implements \GCXAuthz\Command {
 		private $_type;
 

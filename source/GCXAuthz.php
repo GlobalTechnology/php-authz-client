@@ -27,6 +27,18 @@ spl_autoload_register(function ($name) {
 		case "GCXAuthz\Commands":
 			require_once(dirname(__FILE__) . '/GCXAuthz/Commands.php');
 			break;
+		case "GCXAuthz\Controller":
+			require_once(dirname(__FILE__) . '/GCXAuthz/Controller.php');
+			break;
+		case "GCXAuthz\Processor":
+			require_once(dirname(__FILE__) . '/GCXAuthz/Processor.php');
+			break;
+		case "GCXAuthz\Response":
+			require_once(dirname(__FILE__) . '/GCXAuthz/Response.php');
+			break;
+		case "GCXAuthz\RpcProcessor":
+			require_once(dirname(__FILE__) . '/GCXAuthz/RpcProcessor.php');
+			break;
 		case "GCXAuthz\XmlUtils":
 			require_once(dirname(__FILE__) . '/GCXAuthz/XmlUtils.php');
 			break;

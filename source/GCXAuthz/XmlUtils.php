@@ -23,10 +23,10 @@ namespace GCXAuthz {
 				// switch based on node being processed
 				switch($node->localName) {
 					// commands node
-					case "commands":
+					case 'commands':
 						return Commands::newFromXml($node, $xpath);
 					// command node
-					case "command"   :
+					case 'command':
 						$type = $node->getAttribute('type');
 						switch($type) {
 							case 'check':
@@ -44,22 +44,25 @@ namespace GCXAuthz {
 								return Command\Base::newFromXml($node, $xpath);
 						}
 						break;
+					// response node
+					case 'response':
+						break;
 					// object node
-					case "key":
+					case 'key':
 						return Object\Key::newFromXml($node);
-					case "namespace":
+					case 'namespace':
 						return Object\Ns::newFromXml($node);
-					case "entity":
+					case 'entity':
 						return Object\Entity::newFromXml($node);
-					case "user":
+					case 'user':
 						return Object\User::newFromXml($node);
-					case "group":
+					case 'group':
 						return Object\Group::newFromXml($node);
-					case "target":
+					case 'target':
 						return Object\Target::newFromXml($node);
-					case "resource":
+					case 'resource':
 						return Object\Resource::newFromXml($node);
-					case "role":
+					case 'role':
 						return Object\Role::newFromXml($node);
 				}
 			}
